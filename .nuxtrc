@@ -1,0 +1,2 @@
+# Vercel serverless preset
+NITRO_PRESET=vercel
