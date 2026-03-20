@@ -10,9 +10,20 @@
 // Sanitize HTML to prevent XSS
 export const sanitizeHTML = (str: string): string => {
   if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  
+  // Client-side: use DOM for sanitization
+  if (process.client && typeof document !== 'undefined') {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  
+  // Server-side: basic sanitization
+  return str
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 };
 
 // Sanitize URL to prevent javascript: protocol

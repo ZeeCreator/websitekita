@@ -46,26 +46,24 @@ export default defineNuxtPlugin(() => {
       });
 
       // Prevent console enumeration (basic anti-debugging)
-      if (process.env.NODE_ENV === 'production') {
-        let prev: any;
-        try {
-          const descriptor = Object.getOwnPropertyDescriptor(console, 'log');
-          prev = descriptor?.get;
-        } catch (e) {
-          // Ignore
-        }
-
-        Object.defineProperty(console, 'log', {
-          get: function () {
-            const caller = new Error().stack?.split('\n')[2];
-            if (caller && caller.includes('debugger')) {
-              return () => {};
-            }
-            return prev ? prev() : () => {};
-          },
-          configurable: true,
-        });
+      let prev: any;
+      try {
+        const descriptor = Object.getOwnPropertyDescriptor(console, 'log');
+        prev = descriptor?.get;
+      } catch (e) {
+        // Ignore
       }
+
+      Object.defineProperty(console, 'log', {
+        get: function () {
+          const caller = new Error().stack?.split('\n')[2];
+          if (caller && caller.includes('debugger')) {
+            return () => {};
+          }
+          return prev ? prev() : () => {};
+        },
+        configurable: true,
+      });
     }
   };
 

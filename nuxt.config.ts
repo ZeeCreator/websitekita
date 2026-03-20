@@ -1,6 +1,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
 
+  // SSR configuration for Vercel
+  ssr: true,
+
   vite: {
     server: {
       watch: {
